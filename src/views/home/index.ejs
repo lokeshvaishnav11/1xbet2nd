@@ -1048,9 +1048,110 @@
       border-radius: 20px;
       font-size: 14px;
       letter-spacing: 1px;
+      text-wrap-mode: nowrap;
     }
   </style>
 
+
+<style>
+
+
+.policy-box{
+    background:#1a1a1a;
+    padding:20px;
+    border-radius:10px;
+    color:#cfcfcf;
+}
+
+.policy-section h5{
+    color:#ffffff;
+    font-weight:600;
+    margin-bottom:10px;
+}
+
+.policy-section p{
+    font-size:14px;
+    line-height:1.6;
+    color:#9e9e9e;
+}
+
+/* Download Button */
+
+.download-btn{
+    background:linear-gradient(90deg,#ff5b5b,#ff2d2d);
+    color:white;
+    font-weight:600;
+    border-radius:15px;
+    padding:12px;
+    text-align:center;
+    display:block;
+    text-decoration:none;
+    box-shadow:0 5px 15px rgba(255,0,0,0.4);
+}
+
+/* Section Title */
+
+.section-title{
+    color:#bdbdbd;
+    font-weight:600;
+    margin-top:20px;
+    letter-spacing:1px;
+}
+
+.section-title::before{
+    content:'';
+    width:4px;
+    height:18px;
+    background:red;
+    display:inline-block;
+    margin-right:10px;
+    border-radius:5px;
+}
+
+
+
+.aviator-title{
+    font-size:55px;
+    color:#ff2b2b;
+    font-weight:700;
+    text-align:center;
+}
+
+.aviator-small{
+    color:white;
+    font-size:18px;
+    margin-top:10px;
+}
+
+.plane{
+    position:absolute;
+    right:15px;
+    top:15px;
+    font-size:30px;
+    color:red;
+}
+
+
+
+
+.games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
+
+.game-card {
+    background: #2d2e30; border: 1px solid var(--border-color);
+    border-radius: 16px; overflow: hidden; position: relative;
+    transition: 0.2s; 
+    /* Card Shadow */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.game-card:active { transform: scale(0.96); border-color: var(--primary); }
+.game-card.featured { grid-column: span 2; } 
+.game-img { width: 100%; height: 110px; object-fit: cover; display: block; }
+.game-card.featured .game-img { height: 160px; }
+.game-info { position: absolute; bottom: 0; left: 0; width: 100%; padding: 12px; background: linear-gradient(to top, #1a1b1d, transparent); }
+.game-title { margin: 0; color: #fff; font-size: 15px; font-weight: 700; }
+
+
+</style>
 
 
 
@@ -1111,7 +1212,7 @@
     >
       CUSTOMER SUPPORT
     </div> -->
-          <div style="<%= money === false ? 'margin-top:0px;' : 'margin-top:60px;' %>">
+          <!-- <div style="<%= money === false ? 'margin-top:0px;' : 'margin-top:60px;' %>">
             <div class="aviator-marquee">
               <div class="marquee-track">
                 <span>AVIATOR CRASH GAME</span>
@@ -1120,27 +1221,28 @@
                 <span>AVIATOR CRASH GAME</span>
               </div>
             </div>
-          </div>
+          </div> -->
 
-          <div style="display: none;">
+          <div style="">
             <div class="slider-container" style="<%= money === false ? 'margin-top:0px;' : 'margin-top:60px;' %>">
               <div class="slider-track">
-                <img src="/images/banners/ban1.jpeg">
-                <img src="/images/banners/ban2.jpeg">
-                <img src="/images/banners/ban3.jpeg">
-                <img src="/images/banners/ban4.jpeg">
+                <img src="https://guru11.club/images/img1.jpeg">
+                <img src="https://guru11.club/images/img2.jpeg">
+                <img src="https://guru11.club/images/img3.jpeg">
+                <img src="https://guru11.club/images/img4.jpeg">
+                <img src="https://guru11.club/images/img5.jpg">
               </div>
 
               <!-- arrows -->
-              <button class="slider-arrow prev">‹</button>
-              <button class="slider-arrow next">›</button>
+              <button style="display: none;" class="slider-arrow prev">‹</button>
+              <button style="display: none;" class="slider-arrow next">›</button>
 
               <!-- dots -->
-              <div class="slider-dots"></div>
+              <div style="display: none;" class="slider-dots"></div>
             </div>
           </div>
 
-          <div style="margin-top: 20px;">
+          <div style="margin-top: 20px; display: none;">
             <h1 style="font-size:1.7rem; text-align: center;">Aviator Game</h1>
             <p style="text-align: center;">Fly smart, cash out faster!</p>
             <div class="cta-buttons">
@@ -1166,17 +1268,17 @@
           </div>
 
          
-
+<!-- 
           <div style="justify-content: center; display: flex; margin-top: 20px;">
             <div class="aviator-card" id="aviatorCard">
               <img src="/images/icons/aviator.gif" alt="Aviator">
             </div>
 
 
-          </div>
+          </div> -->
 
 
-          <a style="justify-content: center; display: flex; margin-top: 20px;" href="/win">
+          <!-- <a style="justify-content: center; display: flex; margin-top: 20px;" href="/win">
             <div class="aviator-card">
               <img src="/images/icons/winn2.jpeg" alt="Aviator" style="width: 220px; height: 220px;">
             </div>
@@ -1206,7 +1308,7 @@
             </div>
 
 
-          </a>
+          </a> -->
 
 
 
@@ -1257,6 +1359,19 @@
 
                 </div>
               </header>
+
+
+
+            
+
+
+
+
+
+
+
+
+
               <div class="main-content-grid mt-4">
                 <section class="activity-section cyber-card">
                   <h3><i class="fas fa-trophy"></i> Live Payouts</h3>
@@ -1309,6 +1424,74 @@
 
           </div>
 
+
+
+            <div class="container py-4">
+
+    <!-- Download Button -->
+    <a href="#" class="download-btn text-center">
+        ⬇ Download App
+    </a>
+
+    <!-- Original Games -->
+    <div class="section-title">
+        ORIGINAL GAMES
+    </div>
+
+   <div class="games-grid">
+        <div class="game-card featured" onclick="window.location.href='aviator'">
+            <img src="images/aviatornew.png" class="game-img" onerror="this.src='https://placehold.co/600x500/1a1a1a/gold?text=CHICKEN+ROAD'">
+            <div class="game-info"><h4 class="game-title">Aviator</h4></div>
+        </div>
+        <div class="game-card" onclick="window.location.href='/lottery/chicken'">
+            <img src="/images/chicken.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/red?text=AVIATOR'">
+            <div class="game-info"><h4 class="game-title">Chicken Road</h4></div>
+        </div>
+        <div class="game-card" onclick="window.location.href='win'">
+            <img src="/images/icons/winn2.jpeg" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
+            <div class="game-info"><h4 class="game-title">Wingo</h4></div>
+        </div>
+
+          <div class="game-card" onclick="window.location.href='5d'">
+            <img src="/images/icons/5dd.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
+            <div class="game-info"><h4 class="game-title">5D</h4></div>
+        </div>
+
+          <div class="game-card" onclick="window.location.href='k3'">
+            <img src="/images/icons/k33.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
+            <div class="game-info"><h4 class="game-title">K3</h4></div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<div class="container mt-4">
+
+    <div class="policy-box">
+
+        <div class="policy-section">
+            <h5>Risk Disclosure</h5>
+            <p>
+                Participation in gaming involves financial risk. By using this platform,
+                you acknowledge that you are 18+ years old. <strong>Guru11</strong> is not
+                responsible for any financial losses. Play responsibly.
+            </p>
+        </div>
+
+        <div class="policy-section mt-3">
+            <h5>No Refund Policy</h5>
+            <p>
+                All deposits are final. Once funds are used in gameplay, they cannot be
+                refunded or cancelled. Withdrawals are processed only to the registered
+                bank account of the user.
+            </p>
+        </div>
+
+    </div>
+
+</div>
 
 
           <section class="gaming-footer py-5">
@@ -1384,6 +1567,10 @@
           
 
           </section>
+
+
+
+
           <div id="loginPopupOverlay" class="popup-overlay">
             <div class="popup-content register-form">
               <button class="popup-close-btn" id="closeLoginPopupBtn">×</button>
@@ -2291,6 +2478,11 @@
     prevBtn.addEventListener("click", () => {
       moveTo((index - 1 + total) % total);
     });
+
+    // AUTO SLIDER
+let autoSlide = setInterval(() => {
+  moveTo((index + 1) % total);
+}, 3000);
 
     // --- ENHANCED LIVE WITHDRAWALS FEED LOGIC WITH ANIMATIONS ---
     const withdrawalsFeed = document.getElementById('withdrawals-feed');
