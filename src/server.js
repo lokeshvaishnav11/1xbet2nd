@@ -113,6 +113,24 @@ app.get('/health', (req, res) => {
       console.log('Health check hit');
       res.status(200).send('OK');
     }); 
+
+app.use('/lottery', express.static(path.join(__dirname, 'lottery/build')));
+
+app.get("/", (req, res) => {
+      return res.redirect("/home")
+   })
+app.get(['/lottery', '/lottery/'], (req, res) => {
+    res.sendFile(path.join(__dirname, 'lottery/build', 'index.html'));
+  });
+
+  app.get('/lottery/history', (req, res) => {
+    res.sendFile(path.join(__dirname, 'lottery/build', 'index.html'));
+  });
+
+  app.get('/lottery/chicken', (req, res) => {
+    res.sendFile(path.join(__dirname, 'lottery/build', 'index.html'));
+  });
+
 app.all('*', (req, res) => {
     // return res.render("404.ejs"); // Render a 404 page if you have one
     return res.status(404).send("404 Not Found"); // Or send a simple text response

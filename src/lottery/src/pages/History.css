@@ -1,0 +1,152 @@
+.ticket-heading {
+    font-size: 2rem; /* text-3xl */
+    font-weight: bold;
+    margin-bottom: 2.5rem; /* mb-10 */
+    padding: 1rem 2rem;
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #6a11cb, #2575fc); /* modern gradient */
+    border-radius: 0.75rem; /* rounded-md */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.8s ease-out;
+    letter-spacing: 0.5px;
+  }
+
+  /* 👇 Responsive adjustment for small devices */
+@media (max-width: 640px) {
+    .ticket-heading {
+      font-size: 1.5rem; /* smaller on mobile */
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+
+
+  
+  /* Smooth entrance animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  
+  .availability-heading {
+    font-size: 2rem; /* text-3xl */
+    font-weight: bold;
+    margin-bottom: 2.5rem; /* mb-10 */
+    text-align: center;
+    color: #fff;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b); /* trendy warm gradient */
+    border-radius: 1rem;
+    box-shadow: 0 6px 20px rgba(255, 65, 108, 0.4);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    animation: glowPulse 2s ease-in-out infinite;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 640px) {
+    .availability-heading  {
+      font-size: 1.5rem; /* smaller on mobile */
+      padding: 0.75rem 1.5rem;
+    }
+  }
+  
+  /* Pulse animation for glowing effect */
+  @keyframes glowPulse {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 65, 108, 0.6), 0 0 40px rgba(255, 75, 43, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(255, 75, 43, 0.8), 0 0 60px rgba(255, 65, 108, 0.7);
+    }
+  }
+
+
+  .winner-heading {
+    font-size: 2.25rem; /* same as text-3xl */
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-transform: capitalize;
+    color: #fff;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #00f260, #0575e6); /* vibrant green-blue gradient */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    animation: floatIn 0.8s ease-out;
+    letter-spacing: 0.5px;
+  }
+
+
+  /* Subtle upward entrance animation */
+  @keyframes floatIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  
+  .lottery-results-heading {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    padding: 1.2rem 2rem;
+    text-align: center;
+    color: #fff;
+    background: linear-gradient(135deg, #fc466b, #3f5efb); /* pink-blue gradient */
+    border-radius: 1.5rem;
+    box-shadow: 0 12px 30px rgba(63, 94, 251, 0.3);
+    letter-spacing: 1px;
+    animation: popGlow 1.2s ease-out, colorFlow 6s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+  }
+
+      /* 👇 Responsive adjustment for small devices */
+@media (max-width: 640px) {
+    .lottery-results-heading {
+      font-size: 1.5rem; /* smaller on mobile */
+      padding: 0.75rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+  
+  
+  /* Smooth entrance pop-in effect */
+  @keyframes popGlow {
+    from {
+      opacity: 0;
+      transform: scale(0.9) translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  
+  /* Flowing color shift through hue rotation */
+  @keyframes colorFlow {
+    0% {
+      filter: hue-rotate(0deg);
+    }
+    50% {
+      filter: hue-rotate(15deg);
+    }
+    100% {
+      filter: hue-rotate(0deg);
+    }
+  }
+  
+  

@@ -12,10 +12,12 @@ const k3Controller = require('../controllers/k3Controller');
 const paymentController = require("../controllers/paymentController")
 const  avatior = require("../controllers/aviatorController")
 const dragonController = require('../controllers/dragonController');
+const lottery = require ("../controllers/lottery")
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { home } = require('nodemon/lib/utils');
+const middlewareReact = require('../controllers/middlewareReact');
 
 let router = express.Router();
 
@@ -375,6 +377,10 @@ router.post('/admin/manager/settings/increaseWallet',adminController.middlewareA
    router.post("/watchpays-callback",paymentController.watchPaysCallback)
 
 
+ router.post("/update-balance", middlewareReact , lottery.updateChickWallet)
+   router.post("/chicken-bet", middlewareReact , lottery.betchicken)
+
+   router.get("/chicken-history", middlewareReact , lottery.getChickenHistory)
 
    return app.use("/", router)
 }

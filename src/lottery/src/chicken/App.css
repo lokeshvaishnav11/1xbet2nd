@@ -1,0 +1,17 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+  color: #fff;
+  min-height: 100vh;
+  /* display: flex; 
+  justify-content: center;
+   align-items: center;
+   padding: 20px; */
+  /* min-width: 100vw; */
+}
