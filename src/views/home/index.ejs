@@ -98,7 +98,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 15px;
-      background-color: #1D4268;
+      background-color: #1E2A42;
       position: sticky;
       top: 0;
       z-index: 900;
@@ -110,9 +110,48 @@
     }
 
     .header-buttons {
-      display: flex;
-      gap: 8px;
-    }
+  display: flex;
+  gap: 10px;
+}
+
+/* Base button */
+.auth-btn {
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid;
+}
+
+/* LOGIN button (blue glow) */
+.login-btn {
+  color: #4f46e5;
+  border-color: #4f46e5;
+  box-shadow: 0 0 6px #4f46e5, 0 0 12px rgba(79, 70, 229, 0.6);
+}
+
+/* REGISTER button (pink glow) */
+.register-btn {
+  color: #ec4899;
+  border-color: #ec4899;
+  box-shadow: 0 0 6px #ec4899, 0 0 12px rgba(236, 72, 153, 0.6);
+}
+
+/* Hover effect */
+.login-btn:hover {
+  background: #4f46e5;
+  color: #fff;
+  box-shadow: 0 0 10px #4f46e5, 0 0 20px #4f46e5;
+}
+
+.register-btn:hover {
+  background: #ec4899;
+  color: #fff;
+  box-shadow: 0 0 10px #ec4899, 0 0 20px #ec4899;
+}
 
     .deposit-btn,
     .header-auth-btn {
@@ -950,7 +989,7 @@
 
     .aviator-card {
       position: relative;
-      width: 220px;
+      /* width: 220px; */
       border-radius: 20px;
       overflow: hidden;
       cursor: pointer;
@@ -1008,7 +1047,7 @@
     }
 
     /* Animated Play Button */
-    .play-btn {
+    .play-btn2 {
       width: 70px;
       height: 70px;
       background: radial-gradient(circle, #ff0000, #990000);
@@ -1035,6 +1074,70 @@
         transform: scale(1);
       }
     }
+
+
+
+/* Neon Button */
+.play-btn {
+  padding: 1px 15px;
+  /* font-size: 22px; */
+  /* font-weight: bold; */
+  color: #fff;
+  background: rgba(255, 0, 120, 0.15);
+  border: 2px solid rgba(255, 0, 120, 0.8);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: 0.3s ease;
+  
+  /* Glow */
+  box-shadow: 
+    0 0 10px rgba(255, 0, 120, 0.7),
+    0 0 20px rgba(255, 0, 120, 0.6),
+    0 0 40px rgba(255, 0, 120, 0.5);
+}
+
+/* Inner glow */
+.play-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 15px;
+  background: rgba(255, 0, 120, 0.2);
+  filter: blur(10px);
+  z-index: -1;
+}
+
+/* Hover effect */
+.play-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 
+    0 0 15px rgba(255, 0, 120, 1),
+    0 0 30px rgba(255, 0, 120, 0.9),
+    0 0 60px rgba(255, 0, 120, 0.8);
+}
+
+/* Click effect */
+.play-btn:active {
+  transform: scale(0.95);
+}
+
+/* Optional pulse animation */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 0, 120, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 0, 120, 1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 0, 120, 0.6);
+  }
+}
+
+.play-btn {
+  animation: pulse 2s infinite;
+}
 
     .game-title {
       position: absolute;
@@ -1098,15 +1201,7 @@
     letter-spacing:1px;
 }
 
-.section-title::before{
-    content:'';
-    width:4px;
-    height:18px;
-    background:red;
-    display:inline-block;
-    margin-right:10px;
-    border-radius:5px;
-}
+
 
 
 
@@ -1134,10 +1229,11 @@
 
 
 
-.games-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; }
+.games-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px }
 
 .game-card {
-    background: #2d2e30; border: 1px solid var(--border-color);
+    /* background: #2d2e30; */
+     /* border: 1px solid var(--border-color); */
     border-radius: 16px; overflow: hidden; position: relative;
     transition: 0.2s; 
     /* Card Shadow */
@@ -1151,6 +1247,194 @@
 .game-title { margin: 0; color: #fff; font-size: 15px; font-weight: 700; }
 
 
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: linear-gradient(180deg, #0c1b2a, #08121c);
+  color: #fff;
+}
+
+.container {
+  padding: 20px;
+}
+
+.container2 {
+  padding: 20px;
+  background: #1E2A42;
+}
+
+/* TITLE */
+.title {
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+.title span {
+  margin-left: 5px;
+}
+
+/* WINNER SCROLL */
+.winner-scroll {
+  overflow: hidden;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+.scroll-track {
+  display: flex;
+  gap: 30px;
+  animation: scroll 12s linear infinite;
+}
+
+.winner-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: max-content;
+}
+
+.winner-item img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.winner-item p {
+  font-size: 14px;
+}
+
+/* SCROLL ANIMATION */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* PAYMENT SECTION */
+.payment-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logos {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.logos img {
+  height: 40px;
+}
+
+/* RIGHT SIDE */
+.shield-box {
+  display: flex;
+  align-items: center;
+  /* gap: 15px; */
+  /* background: rgba(255,255,255,0.05); */
+  padding: 2px 2px;
+  /* border-radius: 10px; */
+  /* border: 1px solid rgba(255,255,255,0.2); */
+}
+
+.shield {
+  width: 50px;
+}
+
+.shield-box p {
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+
+
+
+/* Banner */
+.promo-banner {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,150,255,0.6);
+  box-shadow: 0 0 15px rgba(0,150,255,0.6);
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Buttons */
+.btn-group {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.promo-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(0,150,255,0.5);
+  box-shadow: 0 0 12px rgba(0,150,255,0.5);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.promo-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px rgba(0,150,255,0.9);
+}
+
+.promo-btn span {
+  font-weight: bold;
+  text-align: left;
+}
+
+.icon {
+  width: 40px;
+}
+
+.icon-right {
+  width: 35px;
+}
+
+/* Payments */
+.payments {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.payments img {
+  width: 60px;
+  background: #fff;
+  padding: 5px;
+  border-radius: 8px;
+}
+
+/* Footer */
+.footer {
+  font-size: 13px;
+  opacity: 0.8;
+  text-align: center;
+}
 </style>
 
 
@@ -1183,25 +1467,15 @@
       <% } else { %>
         <div class="header">
           <img src="/images/banners/logo.png" alt="Aviator Logo" />
-          <div class="header-buttons">
-            <!-- <button id="openLoginPopupBtn" class="header-auth-btn" style="background-color: #ea580c; color: white">
-            Login
-          </button> -->
+       <div class="header-buttons">
+  <button id="openLoginPopupBtn" class="play-btn">
+    LOGIN
+  </button>
 
-            <button id="openRegisterPopupBtn" class="btn btn-sm  text-white fw-semibold rounded"
-              style="background-color:#8BC34A;">
-              REGISTRATION
-            </button>
-
-            <button id="openLoginPopupBtn" class="btn btn-sm text-white fw-semibold rounded"
-              style="background-color:#2F6FA3;">
-              LOG IN
-            </button>
-
-            <!-- <button id="openRegisterPopupBtn" class="header-auth-btn" style="background-color: #ea580c; color: white">
-            Register
-          </button> -->
-          </div>
+  <button id="openRegisterPopupBtn" class="play-btn">
+    REGISTER
+  </button>
+</div>
         </div>
         <% } %>
 
@@ -1223,7 +1497,7 @@
             </div>
           </div> -->
 
-          <div style="">
+          <div style="display: none;">
             <div class="slider-container" style="<%= money === false ? 'margin-top:0px;' : 'margin-top:60px;' %>">
               <div class="slider-track">
                 <img src="https://guru11.club/images/img1.jpeg">
@@ -1268,14 +1542,79 @@
           </div>
 
          
-<!-- 
-          <div style="justify-content: center; display: flex; margin-top: 20px;">
+
+          <div   style="justify-content:center; display:flex; margin-top:<%= money === false ? '0px' : '60px' %>;">
             <div class="aviator-card" id="aviatorCard">
-              <img src="/images/icons/aviator.gif" alt="Aviator">
+              <img src="/images/avi.jpeg" alt="Aviator">
             </div>
 
 
-          </div> -->
+          </div>
+
+           <div class="container2">
+
+    <!-- TOP SECTION -->
+    <h2 class="title">SOCIAL PROOF & <span>LIVE WINNINGS</span></h2>
+
+    <!-- WINNER SCROLL -->
+    <div class="winner-scroll">
+      <div class="scroll-track">
+        
+        <!-- ITEM -->
+        <div class="winner-item">
+          <img src="/images/icons/user1.jpg" />
+          <p>User *ak*** won ₹1200</p>
+        </div>
+
+        <div class="winner-item">
+          <img src="/images/icons/user2.jpg" />
+          <p>User *cj*** won ₹500</p>
+        </div>
+
+        <div class="winner-item">
+          <img src="/images/icons/user3.jpg" />
+          <p>User *rk*** won ₹2000</p>
+        </div>
+
+        <!-- repeat for smooth infinite -->
+        <div class="winner-item">
+          <img src="/images/icons/user1.jpg" />
+          <p>User *ak*** won ₹1200</p>
+        </div>
+
+        <div class="winner-item">
+          <img src="/images/icons/user2.jpg" />
+          <p>User *cj*** won ₹500</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PAYMENT SECTION -->
+    <div class="payment-section">
+
+      <div class="left">
+        <h2 class="title">PAYMENT SUPPORT</h2>
+
+        <div class="logos">
+          <img src="/images/icons/upi.png" />
+          <img src="/images/icons/phonepe.png" />
+          <img src="/images/icons/gpay.png" />
+          <img src="/images/icons/paytm.png" />
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="shield-box">
+          <img src="/images/icons/shield.png" class="shield"/>
+          <p>INSTANT <br> DEPOSITS & <br> SECURE PAYOUTS.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
 
 
           <!-- <a style="justify-content: center; display: flex; margin-top: 20px;" href="/win">
@@ -1318,7 +1657,7 @@
 
 
 
-          <div class="page-wrapper" style="display: none;">
+          <div class="page-wrapper"  style="display: none;" >
 
 
 
@@ -1330,13 +1669,13 @@
 
 
 
-              <header class="hero-section cyber-card">
+              <header class="hero-section cyber-card"  style="display: none;">
 
 
 
 
-                <h1 style="font-size:1.7rem">Aviator Game</h1>
-                <p>Fly smart, cash out faster!</p>
+                <!-- <h1 style="font-size:1.7rem">Aviator Game</h1>
+                <p>Fly smart, cash out faster!</p> -->
                 <div class="cta-buttons">
 
                   <% if (money===false) { %>
@@ -1373,10 +1712,10 @@
 
 
               <div class="main-content-grid mt-4">
-                <section class="activity-section cyber-card">
+                <!-- <section class="activity-section cyber-card">
                   <h3><i class="fas fa-trophy"></i> Live Payouts</h3>
                   <div id="withdrawals-feed"></div>
-                </section>
+                </section> -->
 
                 <section class="payment-methods cyber-card">
                   <h3><i class="fas fa-credit-card"></i> Secure &amp; Instant Payments</h3>
@@ -1391,7 +1730,7 @@
                 </section>
               </div>
 
-              <section class="features-section mt-5">
+              <section class="features-section mt-5"  style="display: none;">
                 <h3 style="margin-bottom:25px">Our Digital Edge</h3>
                 <div class="features-grid">
                   <div class="feature-card cyber-card">
@@ -1429,9 +1768,9 @@
             <div class="container py-4">
 
     <!-- Download Button -->
-    <a href="#" class="download-btn text-center">
+    <!-- <a href="#" class="download-btn text-center">
         ⬇ Download App
-    </a>
+    </a> -->
 
     <!-- Original Games -->
     <div class="section-title">
@@ -1439,27 +1778,27 @@
     </div>
 
    <div class="games-grid">
-        <div class="game-card featured" onclick="window.location.href='aviator'">
-            <img src="images/aviatornew.png" class="game-img" onerror="this.src='https://placehold.co/600x500/1a1a1a/gold?text=CHICKEN+ROAD'">
-            <div class="game-info"><h4 class="game-title">Aviator</h4></div>
+        <div class="game-card" onclick="window.location.href='aviator'">
+            <img src="images/avi.png" class="game-img" onerror="this.src='https://placehold.co/600x500/1a1a1a/gold?text=CHICKEN+ROAD'">
+            <!-- <div class="game-info"><h4 class="game-title">Aviator</h4></div> -->
         </div>
         <div class="game-card" onclick="window.location.href='/lottery/chicken'">
-            <img src="/images/chicken.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/red?text=AVIATOR'">
-            <div class="game-info"><h4 class="game-title">Chicken Road</h4></div>
+            <img src="/images/chickennew.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/red?text=AVIATOR'">
+            <!-- <div class="game-info"><h4 class="game-title">Chicken Road</h4></div> -->
         </div>
         <div class="game-card" onclick="window.location.href='win'">
-            <img src="/images/icons/winn2.jpeg" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
-            <div class="game-info"><h4 class="game-title">Wingo</h4></div>
+            <img src="/images/wingo.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
+            <!-- <div class="game-info"><h4 class="game-title">Wingo</h4></div> -->
         </div>
 
           <div class="game-card" onclick="window.location.href='5d'">
-            <img src="/images/icons/5dd.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
-            <div class="game-info"><h4 class="game-title">5D</h4></div>
+            <img src="/images/5d.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
+            <!-- <div class="game-info"><h4 class="game-title">5D</h4></div> -->
         </div>
 
           <div class="game-card" onclick="window.location.href='k3'">
-            <img src="/images/icons/k33.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
-            <div class="game-info"><h4 class="game-title">K3</h4></div>
+            <img src="/images/k3.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
+            <!-- <div class="game-info"><h4 class="game-title">K3</h4></div> -->
         </div>
     </div>
 
@@ -1467,7 +1806,7 @@
 
 
 
-<div class="container mt-4">
+<!-- <div class="container mt-4">
 
     <div class="policy-box">
 
@@ -1491,10 +1830,52 @@
 
     </div>
 
+</div> -->
+
+
+<div class="container" style="text-align: center;">
+
+  <!-- Title -->
+  <div class="section-title" style="text-align: left;">PROMOTIONS</h2>
+
+  <!-- Banner -->
+  <div class="promo-banner">
+    100% WELCOME BONUS ON 1ST DEPOSIT GET ₹500 JOINING
+  </div>
+
+  <!-- Buttons -->
+  <div class="btn-group">
+
+    <div class="promo-btn">
+      <img src="/images/icons/chat.png" class="icon" />
+      <span>24/7 LIVE<br>SUPPORT</span>
+      <img src="/images/icons/telegram.png" class="icon-right" />
+    </div>
+
+    <div class="promo-btn">
+      <img src="/images/icons/android.png" class="icon" />
+      <span>DOWNLOAD<br>ANDROID APP</span>
+    </div>
+
+  </div>
+
+  <!-- Payment Icons -->
+  <div class="payments">
+    <img src="/images/icons/upi2.png">
+    <img src="/images/icons/mastercard.png">
+    <img src="/images/icons/gpay2.png">
+    <img src="/images/icons/paytm.png">
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>About Us | Rules | Responsible Gaming</p>
+    <p>© 2026 1XBET AVIATOR. Please Play Responsibly.</p>
+  </div>
+
 </div>
 
-
-          <section class="gaming-footer py-5">
+          <section class="gaming-footer py-5" style="display: none;">
             <div class="container">
 
               <!-- PARTNERS -->

@@ -190,7 +190,7 @@ let vipRate = [
   },
 ]
 
-const betWinGo = async (req, res) => {
+const betWinGoOldwaliissue = async (req, res) => {
   let { typeid, join, x, money } = req.body;
   let auth = req.cookies.auth;
 
@@ -367,6 +367,247 @@ const betWinGo = async (req, res) => {
     const [parent] = await connection.execute('SELECT phone , vip_level FROM users WHERE code = ?',[user[0].invite]);
     const ratio = vipRate.filter((data)=>data.level===parent[0].vip_level);
     await connection.execute('UPDATE users SET win_wallet = win_wallet + ? WHERE phone = ?',[Math.round(totalBetAmount*ratio[0].rebate/100),parent[0].phone]);
+      if(closestExpObject.level>currentLvl){
+        let arr = updatedUser[0].check_vip.split(',').map(Number);
+
+        if(arr[closestExpObject.level-1]===0){
+          arr[closestExpObject.level-1] =1;
+          const str = arr.join(',');
+          await connection.execute(`UPDATE users set vip_level = ? , win_wallet = win_wallet + ?,check_vip = ? where phone = ?`,[closestExpObject.level,closestExpObject.bonus,str,updatedUser[0].phone]);
+          await connection.execute(`INSERT INTO vip_record set type = "Level Up Reward",reward = ?,exp = ?,level = ?,phone = ?`,[closestExpObject.bonus,closestExpObject.exp,closestExpObject.level,updatedUser[0].phone])
+        }
+        else{
+          await connection.execute(`UPDATE users SET vip_level = ? where phone = ?`,[closestExpObject.level,updatedUser[0].phone]);
+        }
+       
+      }
+    await rosesPlus(auth, totalBetAmount);
+    const [level] = await connection.query("SELECT * FROM level ");
+    let level0 = level[0];
+    const sql2 = `INSERT INTO roses SET 
+        phone = ?,
+        code = ?,
+        invite = ?,
+        f1 = ?,
+        f2 = ?,
+        f3 = ?,
+        f4 = ?,
+        time = ?`;
+    let f1 = (totalBetAmount / 100) * level0.f1;
+    let f2 = (totalBetAmount / 100) * level0.f2;
+    let f3 = (totalBetAmount / 100) * level0.f3;
+    let f4 = (totalBetAmount / 100) * level0.f4;
+    await connection.execute(sql2, [
+      userInfo.phone,
+      userInfo.code,
+      userInfo.invite,
+      f1,
+      f2,
+      f3,
+      f4,
+      timeNow
+    ]);
+    return res.status(200).json({
+      message: "Successful bet",
+      status: true,
+      data: result,
+      change: updatedUser[0].level,
+      money: updatedUser[0].money,
+      win_wallet: updatedUser[0].win_wallet
+    });
+  } else {
+    return res.status(200).json({
+      message: "The amount is not enough",
+      status: false
+    });
+  }
+};
+
+const betWinGo = async (req, res) => {
+  let { typeid, join, x, money } = req.body;
+   console.log(req.body,"request bodyyy")
+  let auth = req.cookies.auth;
+  // console.log(auth,"auttht")
+
+  if (typeid != 1 && typeid != 3 && typeid != 5 && typeid != 10) {
+    return res.status(200).json({
+      message: "Error!",
+      status: true
+    });
+  }
+
+  let gameJoin = "";
+  if (typeid == 1) gameJoin = "wingo";
+  if (typeid == 3) gameJoin = "wingo3";
+  if (typeid == 5) gameJoin = "wingo5";
+  if (typeid == 10) gameJoin = "wingo10";
+  const [winGoNow] = await connection.query(
+    `SELECT period FROM wingo WHERE status = 0 AND game = '${gameJoin}' ORDER BY id DESC LIMIT 1`
+  );
+  const [user] = await connection.query(
+    "SELECT `phone`, `code`, `invite`, `level`, `money`, `win_wallet` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ",
+    [auth]
+  );
+
+  console.log(winGoNow,user,"FGHJKOPFGHJKLP")
+  if (!winGoNow[0] || !user[0] || !isNumber(x) || !isNumber(money)) {
+    console.log("xyccc")
+    return res.status(200).json({
+      message: "Error!",
+      status: true
+    });
+  }
+
+  let userInfo = user[0];
+  let period = winGoNow[0].period;
+  let fee = x * money * 0.02;
+  let totalBetAmount = x * money;
+  let timeNow = Date.now();
+
+  let remainingMoney = userInfo.money - totalBetAmount;
+  let remainingWallet = userInfo.win_wallet;
+
+  if (remainingMoney < 0) {
+    remainingWallet += remainingMoney; // Deduct the negative amount from win_wallet
+    remainingMoney = 0;
+  }
+
+  let date = new Date();
+  let years = formateT(date.getFullYear());
+  let months = formateT(date.getMonth() + 1);
+  let days = formateT(date.getDate());
+  let id_product =
+    years + months + days + Math.floor(Math.random() * 1000000000000000);
+
+  let formatTime = timerJoin();
+
+  let color = "";
+  if (join == "l") {
+    color = "big";
+  } else if (join == "n") {
+    color = "small";
+  } else if (join == "t") {
+    color = "violet";
+  } else if (join == "d") {
+    color = "red";
+  } else if (join == "x") {
+    color = "green";
+  } else if (join == "0") {
+    color = "red-violet";
+  } else if (join == "5") {
+    color = "green-violet";
+  } else if (join % 2 == 0) {
+    color = "red";
+  } else if (join % 2 != 0) {
+    color = "green";
+  }
+
+  let checkJoin = "";
+
+  if ((!isNumber(join) && join == "l") || join == "n") {
+    checkJoin = `
+        <div data-v-a9660e98="" class="van-image" style="width: 30px; height: 30px;">
+            <img src="/images/${join == "n" ? "small" : "big"
+      }.png" class="van-image__img">
+        </div>
+        `;
+  } else {
+    checkJoin = `
+        <span data-v-a9660e98="">${isNumber(join) ? join : ""}</span>
+        `;
+  }
+
+  let result = `
+    <div data-v-a9660e98="" issuenumber="${period}" addtime="${formatTime}" rowid="1" class="hb">
+        <div data-v-a9660e98="" class="item c-row">
+            <div data-v-a9660e98="" class="result">
+                <div data-v-a9660e98="" class="select select-${color}">
+                    ${checkJoin}
+                </div>
+            </div>
+            <div data-v-a9660e98="" class="c-row c-row-between info">
+                <div data-v-a9660e98="">
+                    <div data-v-a9660e98="" class="issueName">
+                        ${period}
+                    </div>
+                    <div data-v-a9660e98="" class="tiem">${formatTime}</div>
+                </div>
+            </div>
+        </div>
+        <!---->
+    </div>
+    `;
+
+  function timerJoin(params = "") {
+    let date = "";
+    if (params) {
+      date = new Date(Number(params));
+    } else {
+      date = new Date();
+    }
+    let years = formateT(date.getFullYear());
+    let months = formateT(date.getMonth() + 1);
+    let days = formateT(date.getDate());
+    return years + "-" + months + "-" + days;
+  }
+  let checkTime = timerJoin(date.getTime());
+
+  if (remainingMoney > 0 || remainingWallet >= 0) {
+    const sql = `INSERT INTO minutes_1 SET 
+        id_product = ?,
+        phone = ?,
+        code = ?,
+        invite = ?,
+        stage = ?,
+        level = ?,
+        money = ?,
+        amount = ?,
+        fee = ?,
+        \`get\`  = ?,
+        game = ?,
+        bet = ?,
+        status = ?,
+        today = ?,
+        time = ?`;
+    await connection.execute(sql, [
+      id_product,
+      userInfo.phone,
+      userInfo.code,
+      userInfo.invite,
+      period,
+      userInfo.level,
+      totalBetAmount - fee,
+      x,
+      fee,
+      0,
+      gameJoin,
+      join,
+      0,
+      checkTime,
+      timeNow
+    ]);
+    await connection.execute(
+      "UPDATE `users` SET `money` = ?, `win_wallet` = ?,vip_exp = vip_exp + ? WHERE `token` = ?",
+      [remainingMoney, remainingWallet,totalBetAmount,auth]
+    );
+    const [updatedUser] = await connection.query(
+      "SELECT `money`, `win_wallet`,vip_exp,vip_level,check_vip ,phone FROM users WHERE token = ? AND veri = 1  LIMIT 1 ",
+      [auth]
+    );
+   
+    let exp = updatedUser[0].vip_exp;
+    let currentLvl = updatedUser[0].vip_level;
+    const closestExpObject = vipRate
+      .filter(item => item.exp <= exp)
+      .sort((a, b) => b.exp - a.exp)[0];
+
+    // const [parent] = await connection.execute('SELECT phone , vip_level FROM users WHERE code = ?',[user[0].invite]);
+    // console.log(parent,"parent");
+    
+    // const ratio = vipRate.filter((data)=>data.level===parent[0].vip_level);
+    // console.log(ratio,"rationnn");
+    
+    // await connection.execute('UPDATE users SET win_wallet = win_wallet + ? WHERE phone = ?',[Math.round(totalBetAmount*ratio[0].rebate/100 || 0),parent[0].phone]);
       if(closestExpObject.level>currentLvl){
         let arr = updatedUser[0].check_vip.split(',').map(Number);
 

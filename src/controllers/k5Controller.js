@@ -117,7 +117,7 @@ const validateBet = async (join, list_join, x, money, game) => {
     return true;
 }
 
-const betK5D = async (req, res) => {
+const betK5Doldwaliissue = async (req, res) => {
     try {
         let { join, list_join, x, money, game,selectedValues } = req.body;
         let auth = req.cookies.auth;
@@ -253,6 +253,148 @@ const betK5D = async (req, res) => {
         }
     } catch (error) {
         if (error) console.log(error);
+    }
+}
+
+const betK5D = async (req, res) => {
+    try {
+        let { join, list_join, x, money, game,selectedValues } = req.body;
+        let auth = req.cookies.auth;
+
+        let validate = await validateBet(join, list_join, x, money, game);
+
+        if (!validate) {
+            return res.status(200).json({
+                message: 'Invalid bet',
+                status: false
+            });
+        }
+
+        const [k5DNow] = await connection.query(`SELECT period FROM 5d WHERE status = 0 AND game = ${game} ORDER BY id DESC LIMIT 1 `);
+        console.log(k5DNow,"k5dow")
+        const [user] = await connection.query('SELECT `phone`, `code`, `invite`, `level`, `money`,`win_wallet` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ', [auth]);
+        console.log(k5DNow,user,'datasdfghjklkjhgfd')
+        if (k5DNow.length < 1 || user.length < 1) {
+            
+            return res.status(200).json({
+                message: 'Error!',
+                status: false
+            });
+        }
+        let userInfo = user[0];
+        let period = k5DNow[0];
+
+        let date = new Date();
+        let years = formateT(date.getFullYear());
+        let months = formateT(date.getMonth() + 1);
+        let days = formateT(date.getDate());
+        let id_product = years + months + days + Math.floor(Math.random() * 1000000000000000);
+
+        let total = money * x * (String(list_join).split('').length);
+        let fee = total * 0.03;
+        let price = total - fee;
+
+      
+        let check = userInfo.money+userInfo.win_wallet - total;
+        if (check >= 0) {
+            let finalWinWallet = userInfo.win_wallet;
+            let finalWallet = userInfo.money;
+    
+            finalWallet = finalWallet - total;
+    
+            if(finalWallet<0){
+             finalWinWallet = finalWinWallet + finalWallet ;
+             finalWallet = 0 ;
+            }    
+            let timeNow = Date.now();
+            let sqlvalues;
+
+            if (selectedValues.length > 1) {
+              // If multiple selected values, map through and build the array of values
+              sqlvalues = selectedValues.map(selected => [
+                ++id_product, // Incrementing id_product
+                userInfo.phone, 
+                userInfo.code, 
+                userInfo.invite, 
+                period.period, 
+                userInfo.level, 
+                money * x, 
+                money * x * 0.97, 
+                x, 
+                money * x * 0.03, 
+                game, 
+                join, 
+                selected, // This seems like a variable coming from selectedValues
+                0, // Status
+                timeNow // Timestamp
+              ]);
+            } else {
+              // Single entry case, still wrap in an array for consistency
+              sqlvalues = [[
+                id_product, 
+                userInfo.phone, 
+                userInfo.code, 
+                userInfo.invite, 
+                period.period, 
+                userInfo.level, 
+                total, 
+                price, 
+                x, 
+                fee, 
+                game, 
+                join, 
+                list_join, 
+                0, // Status
+                timeNow // Timestamp
+              ]];
+            }
+            
+            // Construct the SQL query with placeholders
+            const numRows = sqlvalues.length;
+            const placeholders = sqlvalues.map(() => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').join(', ');
+            
+            const sql = `INSERT INTO result_5d (id_product, phone, code, invite, stage, level, money, price, amount, fee, game, join_bet, bet, status, time) VALUES ${placeholders}`;
+            
+            // Flatten the sqlvalues array for binding
+            const flattenedValues = sqlvalues.flat();
+            
+            try {
+              await connection.execute(sql, flattenedValues);
+              console.log('Rows inserted successfully');
+            } catch (error) {
+              console.error('Error inserting data:', error);
+            }
+            
+            
+            await connection.execute('UPDATE `users` SET `money` = ?,`win_wallet` = ?, vip_exp = vip_exp + ? WHERE `token` = ? ', [finalWallet,finalWinWallet,money,auth]);
+            const [users] = await connection.query('SELECT `money`, `level`,`win_wallet` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ', [auth]);
+            await rosesPlus(auth, money * x);
+            const [level] = await connection.query('SELECT * FROM level ');
+            let level0 = level[0];
+            const sql2 = `INSERT INTO roses SET phone = ?,code = ?,invite = ?,f1 = ?,f2 = ?,f3 = ?,f4 = ?,time = ?`;
+            let total_m = total;
+            let f1 = (total_m / 100) * level0.f1;
+            let f2 = (total_m / 100) * level0.f2;
+            let f3 = (total_m / 100) * level0.f3;
+            let f4 = (total_m / 100) * level0.f4;
+            await connection.execute(sql2, [userInfo.phone, userInfo.code, userInfo.invite, f1, f2, f3, f4, timeNow]);
+            return res.status(200).json({
+                message: 'Successful bet',
+                status: true,
+                // data: result,
+                change: users[0].level,
+                money: users[0].money,
+                win_wallet:users[0].win_wallet
+            });
+        } else {
+            return res.status(200).json({
+                message: 'The amount is not enough',
+                status: false
+            });
+        }
+    } catch (error) {
+        if (error) console.log(error);
+        
     }
 }
 
