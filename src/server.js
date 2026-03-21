@@ -5,6 +5,7 @@ require('dotenv/config'); // Loads variables into process.env
 require('dotenv').config({ path: '../.env' }); // Optional: Load from specific .env file if needed
 
 const express = require('express');
+const cors = require("cors");
 const http = require('http');       // Require http explicitly
 const path = require('path');       // Require path for resolving paths
 const { Server } = require('socket.io'); // Import Server class for options
@@ -39,6 +40,7 @@ const io = new Server(server, {      // Initialize Socket.IO with options
 app.use(cookieParser()); // For parsing cookies if needed by auth/routes
 app.use(express.json()); // For parsing JSON request bodies
 app.use(express.urlencoded({ extended: true })); // For parsing URL-encoded request bodies
+app.use(cors({ origin: ['http://localhost:3000', "https://1xbet.shopssy.shop", 'http://localhost:3001'  ], credentials: true }))
 
 // --- Static File Serving ---
 // Configure static paths relative to THIS server.js file's location

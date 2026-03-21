@@ -54,52 +54,90 @@ const aviator = async (req, res) => {
 }
 
 const userInfo = async (req, res) => {
-   let auth = req.cookies.auth
+  try {
+    const auth = req.cookies?.auth;
 
-   if (!auth) {
-      return res.status(200).json({
-         message: "Failed",
-         status: false,
-         timeStamp: timeNow,
-      })
-   }
-   const [rows] = await connection.query("SELECT * FROM users WHERE `token` = ? ", [auth])
+    // ❌ No token
+    if (!auth) {
+      return res.status(401).json({
+        message: "Authentication token missing",
+        status: false,
+        error: "NO_TOKEN",
+        timeStamp: Date.now(),
+      });
+    }
 
-   if (!rows) {
-      return res.status(200).json({
-         message: "Failed",
-         status: false,
-         timeStamp: timeNow,
-      })
-   }
-   const [recharge] = await connection.query("SELECT * FROM recharge WHERE `phone` = ? AND status = 1", [rows[0].phone])
-   let totalRecharge = 0
-   recharge.forEach(data => {
-      totalRecharge += data.money
-   })
-   const [withdraw] = await connection.query("SELECT * FROM withdraw WHERE `phone` = ? AND status = 1", [rows[0].phone])
-   let totalWithdraw = 0
-   withdraw.forEach(data => {
-      totalWithdraw += data.money
-   })
+    // ✅ User fetch
+    const [rows] = await connection.query(
+      "SELECT * FROM users WHERE token = ?",
+      [auth]
+    );
 
-   const { id, password, ip, veri, ip_address, status, time, token, ...others } = rows[0]
-   return res.status(200).json({
+    if (!rows || rows.length === 0) {
+      return res.status(404).json({
+        message: "User not found",
+        status: false,
+        error: "USER_NOT_FOUND",
+        timeStamp: Date.now(),
+      });
+    }
+
+    const user = rows[0];
+
+    // ✅ Recharge
+    const [recharge] = await connection.query(
+      "SELECT money FROM recharge WHERE phone = ? AND status = 1",
+      [user.phone]
+    );
+
+    const totalRecharge = recharge.reduce(
+      (sum, item) => sum + Number(item.money || 0),
+      0
+    );
+
+    // ✅ Withdraw
+    const [withdraw] = await connection.query(
+      "SELECT money FROM withdraw WHERE phone = ? AND status = 1",
+      [user.phone]
+    );
+
+    const totalWithdraw = withdraw.reduce(
+      (sum, item) => sum + Number(item.money || 0),
+      0
+    );
+
+    // ❌ Remove sensitive data
+    const { password, token, ip, ...safeUser } = user;
+
+    // ✅ Success response
+    return res.status(200).json({
       message: "Success",
       status: true,
       data: {
-         code: others.code,
-         id_user: others.id_user,
-         name_user: others.name_user,
-         phone_user: others.phone,
-         money_user: others.money,
-         win_wallet:others.win_wallet
+        code: safeUser.code,
+        id_user: safeUser.id_user,
+        name_user: safeUser.name_user,
+        phone_user: safeUser.phone,
+        money_user: safeUser.money,
+        win_wallet: safeUser.win_wallet,
       },
-      totalRecharge: totalRecharge,
-      totalWithdraw: totalWithdraw,
-      timeStamp: timeNow,
-   })
-}
+      totalRecharge,
+      totalWithdraw,
+      timeStamp: Date.now(),
+    });
+
+  } catch (error) {
+    console.error("USER INFO ERROR:", error);
+
+    // ❌ DB / Server error
+    return res.status(500).json({
+      message: "Internal Server Error",
+      status: false,
+      error: error.message, // real error
+      timeStamp: Date.now(),
+    });
+  }
+};
 
 const changeUser = async (req, res) => {
    let auth = req.cookies.auth

@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const CbetHistory = () => {
-  const apiUrl = "http://localhost:3000";
-  // const apiUrl = "https://bluedoller.online";
+  // const apiUrl = "http://localhost:3000";
+  const apiUrl = "https://1xbet.shopssy.shop";
 
   
 
