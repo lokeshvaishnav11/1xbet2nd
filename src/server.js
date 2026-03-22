@@ -15,8 +15,8 @@ const cookieParser = require('cookie-parser');
 // --- Configuration & Route Imports ---
 const configViewEngine = require('./config/configEngine'); // Your view engine setup function
 const routes = require('./routes/web');                   // Your main web routes object { initWebRouter: ... }
-// const cronJobContronler = require('./controllers/cronJobContronler'); // Your cron job logic
-// const socketIoController = require('./controllers/socketIoController');  // Your other socket logic (admin messages?)
+const cronJobContronler = require('./controllers/cronJobContronler'); // Your cron job logic
+const socketIoController = require('./controllers/socketIoController');  // Your other socket logic (admin messages?)
 // const aviatorController = require('./controllers/aviatorController'); 
 // const Dragon = require('./controllers/dragonController');
 
@@ -97,14 +97,14 @@ routes.initWebRouter(app);
 
 // 2. Other Specific Socket Controllers (from original server.js)
 // These likely handle different events or namespaces
-// socketIoController.sendMessageAdmin(io); // Handles admin messages?
+socketIoController.sendMessageAdmin(io); // Handles admin messages?
 // aviatorController.Aviator(io);         // Handles Aviator game logic?
 // Dragon.Dragon(io);
 // Dragon.userDekh(io);
 
 // --- Cron Jobs ---
 // Cron jobs operate independently but might use 'io' to emit updates
-// cronJobContronler.cronJobGame1p(io);
+cronJobContronler.cronJobGame1p(io);
 
 // --- 404 Handler ---
 // Catch-all for requests that don't match any route

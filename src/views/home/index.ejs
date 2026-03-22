@@ -1778,29 +1778,28 @@ body {
     </div>
 
    <div class="games-grid">
-        <div class="game-card" onclick="window.location.href='aviator'">
-            <img src="/images/avi.png" class="game-img" onerror="this.src='https://placehold.co/600x500/1a1a1a/gold?text=CHICKEN+ROAD'">
-            <!-- <div class="game-info"><h4 class="game-title">Aviator</h4></div> -->
-        </div>
-        <div class="game-card" onclick="window.location.href='/lottery/chicken'">
-            <img src="/images/chickennew.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/red?text=AVIATOR'">
-            <!-- <div class="game-info"><h4 class="game-title">Chicken Road</h4></div> -->
-        </div>
-        <div class="game-card" onclick="window.location.href='win'">
-            <img src="/images/wingo.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
-            <!-- <div class="game-info"><h4 class="game-title">Wingo</h4></div> -->
-        </div>
 
-          <div class="game-card" onclick="window.location.href='5d'">
-            <img src="/images/5d.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
-            <!-- <div class="game-info"><h4 class="game-title">5D</h4></div> -->
-        </div>
+  <div class="game-card" data-url="/aviator">
+    <img src="/images/avi.png" class="game-img">
+  </div>
 
-          <div class="game-card" onclick="window.location.href='k3'">
-            <img src="/images/k3.png" class="game-img" onerror="this.src='https://placehold.co/300x200/1a1a1a/blue?text=MINES'">
-            <!-- <div class="game-info"><h4 class="game-title">K3</h4></div> -->
-        </div>
-    </div>
+  <div class="game-card" data-url="/lottery/chicken">
+    <img src="/images/chickennew.png" class="game-img">
+  </div>
+
+  <div class="game-card" data-url="/win">
+    <img src="/images/wingo.png" class="game-img">
+  </div>
+
+  <div class="game-card" data-url="/5d">
+    <img src="/images/5d.png" class="game-img">
+  </div>
+
+  <div class="game-card" data-url="/k3">
+    <img src="/images/k3.png" class="game-img">
+  </div>
+
+</div>
 
 </div>
 
@@ -3010,6 +3009,37 @@ let autoSlide = setInterval(() => {
         }
       }
     });
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+
+    var money = <%= money %>;
+    const loginBtn = document.getElementById("openLoginPopupBtn");
+
+    const gameCards = document.querySelectorAll(".game-card");
+
+    gameCards.forEach(card => {
+      card.addEventListener("click", function () {
+
+        const url = card.getAttribute("data-url");
+
+        if (money === false) {
+          // ❌ Not logged in → popup
+          if (loginBtn) {
+            loginBtn.click();
+          } else {
+            alert("Please login first");
+          }
+        } else {
+          // ✅ Logged in → redirect
+          window.location.href = url;
+        }
+
+      });
+    });
+
   });
 </script>
 
