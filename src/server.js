@@ -40,7 +40,7 @@ const io = new Server(server, {      // Initialize Socket.IO with options
 app.use(cookieParser()); // For parsing cookies if needed by auth/routes
 app.use(express.json()); // For parsing JSON request bodies
 app.use(express.urlencoded({ extended: true })); // For parsing URL-encoded request bodies
-app.use(cors({ origin: ['http://localhost:3000', "https://1xbet.shopssy.shop", 'http://localhost:3001'  ], credentials: true }))
+app.use(cors({ origin: ['http://localhost:3000', "https://1xbet.shopssy.shop","https://1xbet99.vip" ,'http://localhost:3001'  ], credentials: true }))
 
 // --- Static File Serving ---
 // Configure static paths relative to THIS server.js file's location
