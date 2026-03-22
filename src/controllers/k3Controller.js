@@ -272,8 +272,8 @@ const betK3 = async (req, res) => {
         //     });
         // }
 
-        // const [k3Now] = await connection.query(`SELECT period FROM k3 WHERE status = 0 AND game = ${game} ORDER BY id DESC LIMIT 1 `);
-        const [k3Now] = await logAndExecute(connection, `SELECT period FROM k3 WHERE status = 0 AND game = ? ORDER BY id DESC LIMIT 1 `, [game]);
+        const [k3Now] = await connection.query(`SELECT period FROM k3 WHERE status = 0 AND game = ${game} ORDER BY id DESC LIMIT 1 `);
+        // const [k3Now] = await logAndExecute(connection, `SELECT period FROM k3 WHERE status = 0 AND game = ? ORDER BY id DESC LIMIT 1 `, [game]);
 
         console.log(k3Now,"k3nowwwww")
         const [user] = await connection.query('SELECT `phone`, `code`, `invite`, `level`, `money`,`win_wallet` FROM users WHERE token = ? AND veri = 1  LIMIT 1 ', [auth]);
