@@ -3117,14 +3117,15 @@
 
 
     aviatorCard.addEventListener("click", function () {
-      if (money === false) {
-        // ❌ login nahi hai → popup open
-
-        if (money >= 50000) {
+       if (money >= 50000) {
           alert("100% सुरक्षित विड्रॉ के बाद ही दोबारा गेम शुरू करें।");
           return;
 
         }
+      if (money === false) {
+        // ❌ login nahi hai → popup open
+
+       
         if (loginBtn) {
           loginBtn.click();
         } else {
