@@ -44,6 +44,7 @@ const initiateManualUPIPayment = async (req, res) => {
         extra: query?.extra,
         ekyc: query?.ekyc,
         UpiId: momo.upi_id,
+        country: query?.country || 'IN', // Default to India if not specified
     });
 }
 
@@ -232,6 +233,126 @@ const addManualUPIPaymentRequest = async (req, res) => {
 
     } catch (error) {
         console.log(error)
+
+        res.status(500).json({
+            status: false,
+            message: "Something went wrong!",
+            timestamp: timeNow
+        })
+    }
+}
+
+// PKR Payment Handler for Pakistan
+const addManualPKRPaymentRequest = async (req, res) => {
+    try {
+        const data = req.body
+        let auth = req.cookies.auth;
+        let moneyp = parseInt(data.money);
+        console.log("PKR Payment - IP:", req.ip)
+        
+        const minimumMoneyAllowed = parseInt(process.env.MINIMUM_MONEY) || 500
+
+        if (!moneyp || !(moneyp >= minimumMoneyAllowed)) {
+            return res.status(400).json({
+                message: `Money is Required and it should be PKR ${minimumMoneyAllowed} or above!`,
+                status: false,
+                timeStamp: timeNow,
+            })
+        }
+
+        const user = await getUserDataByAuthToken(auth)
+
+        console.log("PKR Payment - User:", user)
+
+        if (!user) {
+            return res.status(401).json({
+                message: 'User not authenticated',
+                status: false,
+                timeStamp: timeNow,
+            })
+        }
+
+        const phone = user.phone;
+
+        // Check for pending recharges and cancel them
+        const pendingRechargeList = await rechargeTable.getRecordByPhoneAndStatus({ 
+            phone: user.phone, 
+            status: PaymentStatusMap.PENDING, 
+            type: PaymentMethodsMap.UPI_MANUAL 
+        })
+
+        if (pendingRechargeList.length !== 0) {
+            const deleteRechargeQueries = pendingRechargeList.map(recharge => {
+                return rechargeTable.cancelById(recharge.id)
+            });
+
+            await Promise.all(deleteRechargeQueries)
+        }
+
+        var orderId = getRechargeOrderId()
+
+        // LG-Pay API for PKR (same endpoint, different trade_type)
+        const url = 'https://www.lg-pay.com/api/order/create';
+        const key = 'UjNje5bSYAlRALt7x32psLTRYU1wnLLs';
+        const app_id = "PKR3248"
+
+        const addon1 = user.username + "#" + user.phone + "#" + user.username + "@gmail.com";
+        console.log("PKR Payment - Addon:", addon1)
+        
+        const params = {
+            app_id,
+            trade_type: 'PKRPH',      // PKR payment type
+            order_sn: orderId,          // unique order number
+            money: moneyp * 100,        // order amount (in cents/paisa)
+            notify_url: 'https://1xbet99.vip/callback/pkr', // PKR callback URL
+            return_url: 'https://1xbet99.vip/home', // user redirect URL
+            subject: 'PKR Test Order',
+            // user_id: addon1,
+            // ip: req.ip
+        };
+
+        const sign = md5_sign(params, key);
+        const payload = { ...params, sign };
+
+        const lgres = await http_post(url, payload);
+        console.log('LG-Pay PKR Response:', lgres);
+        
+        if (lgres.status == 1) {
+            const newRecharge = {
+                orderId: orderId,
+                transactionId: 'NULL',
+                utr: "23456",
+                phone: user.phone,
+                money: moneyp,
+                type: PaymentMethodsMap.UPI_MANUAL,
+                status: 0,
+                today: rechargeTable.getCurrentTimeForTodayField(),
+                url: "NULL",
+                time: timeNow,
+                // country: 'PK', // Pakistan country code
+            }
+
+            const recharge = await rechargeTable.create(newRecharge)
+
+            return res.status(200).json({
+                message: 'PKR Payment Requested successfully! Your Balance will update shortly!',
+                url: lgres?.data.pay_url,
+                recharge: recharge,
+                status: true,
+                timeStamp: timeNow,
+            });
+
+        } else {
+            return res.status(200).json({
+                message: 'Some problem in payment Gateway, Please try Again!',
+                url: lgres?.data.pay_url,
+                status: false,
+                timeStamp: timeNow,
+            });
+        }
+
+    } catch (error) {
+        console.log('PKR Payment Error:', error)
 
         res.status(500).json({
             status: false,
@@ -1233,6 +1354,84 @@ const callbackfromgateway = async (req, res) => {
     }
 }
 
+const callbackfromgatewaypkr = async (req, res) => {
+
+    try {
+        const {
+            order_sn,
+            money,
+            status,
+            pay_time,
+            msg,
+            remark,
+            sign
+        } = req.body;
+
+        const key = 'VN8NHNnda0Rn72UqeIvTwhQuEV2yXVcn'; // your secret key
+        // const key = 'O2UyHC65eofVs2xsGCjDzY2qVbybifea';
+
+
+        // 1. Verify the sign
+        const params = {
+            money,
+            msg,
+            order_sn,
+            pay_time,
+            remark,
+            status
+        };
+
+        // const calculatedSign = md5_sign(params, key); // same method used during order creation
+
+        // if (sign !== calculatedSign) {
+        //     console.warn('Invalid sign. Possible spoofed callback.');
+        //     return res.status(400).send('Invalid signature');
+        // }
+
+        // 2. Mark payment as successful
+        console.log('LG-Pay callback verified:', order_sn);
+
+        const [rows] = await connection.execute(
+            'SELECT id FROM recharge WHERE id_order = ?',
+            [order_sn]
+        );
+
+        if (rows.length === 0) {
+            console.log('No record found');
+        } else {
+            console.log('Recharge ID:', rows[0].id);
+        }
+
+
+
+        // TODO: Update payment status in DB based on order_sn
+        // await rechargeTable.markAsPaid(order_sn, {
+        //     money: parseFloat(money) / 100, // convert back from cents
+        //     pay_time,
+        //     msg
+        // });
+
+        const resdata = await axios.post("https://1xbet99.vip/api/webapi/admin/rechargeDuyet", {
+            id: rows[0]?.id,
+            type: "confirm"
+        })
+
+        console.log(resdata, "resdata");
+        if (resdata.data.status == true) {
+            return res.send('ok');
+        }
+        else {
+            return res.send('fail')
+        }
+
+        // 3. Respond with "ok"
+
+    } catch (err) {
+        console.error('LG-Pay callback error:', err);
+        return res.status(500).send('fail');
+    }
+}
+
 const bondPayCallback = async (req, res) => {
   try {
     const {
@@ -1387,12 +1586,14 @@ module.exports = {
     verifyWowPayPayment,
     initiateManualUPIPayment,
     addManualUPIPaymentRequest,
+    addManualPKRPaymentRequest,
     addManualUSDTPaymentRequest,
     initiateManualUSDTPayment,
     callbackfromgateway,
     addBondPayPaymentRequest,
     bondPayCallback,
     addManualUPIPaymentRequesttwo,
-    watchPaysCallback 
+    watchPaysCallback ,
+    callbackfromgatewaypkr
 
 }

@@ -390,36 +390,46 @@
     <main>
         <header>
             <h2>Select Payment Gateway</h2>
+            <% if (country === 'PK') { %>
+                <p style="color: #666; margin-top: 5px; font-size: 14px;">Pakistan - PKR Payment</p>
+            <% } else { %>
+                <p style="color: #666; margin-top: 5px; font-size: 14px;">India - INR Payment</p>
+            <% } %>
         </header>
 
         <div class="verification_form__root">
             <label>Amount</label>
-            <input type="text" value="<%= Amount %>" disabled />
+            <input type="text" value="<%= Amount %> <%= country === 'PK' ? 'PKR' : 'INR' %>" disabled />
 
-            <!-- UPI OPTIONS -->
-            <!-- UPI OPTIONS -->
-            <div class="upi-container">
-                <div class="upi-box" id="upi1">
-                    <img src="/images/upi.png" alt="UPI 1">
-                    <p>UPI 1</p>
+            <% if (country === 'PK') { %>
+                <!-- Pakistan: Show only LG-Pay PKR option -->
+                <button id="lg_pay_pkr_btn" type="button" style="background: linear-gradient(90deg, #00a651 0%, #008f47 100%); margin-top: 10px; padding: 10px; border-radius: 9px; border: 1px solid #ccc; color: white; font-size: 16px; cursor: pointer;">Pay With LG Pay (PKR)</button>
+            <% } else { %>
+                <!-- India: Show all payment options -->
+                <!-- UPI OPTIONS -->
+                <div class="upi-container">
+                    <div class="upi-box" id="upi1">
+                        <img src="/images/upi.png" alt="UPI 1">
+                        <p>UPI 1</p>
+                    </div>
+
+                    <div class="upi-box" id="upi3">
+                        <img src="/images/upi.png" alt="UPI 2">
+                        <p>UPI 2</p>
+                    </div>
+
+                    <!-- NEW UPI3 BOX -->
+                    <div class="upi-box" id="upi2">
+                        <img src="/images/upi.png" alt="UPI 3">
+                        <p>UPI 3</p>
+                    </div>
                 </div>
 
-                <div class="upi-box" id="upi3">
-                    <img src="/images/upi.png" alt="UPI 2">
-                    <p>UPI 2</p>
+                <div class="upi-note">
+                    <p><strong>Note:</strong> In case of payment failure, please select UPI 1 or UPI 2.</p>
+                    <p><strong>नोट:</strong> पेमेंट फेल होने की स्थिति में कृपया UPI 1 या UPI 2 का चयन करें।</p>
                 </div>
-
-                <!-- NEW UPI3 BOX -->
-                <div class="upi-box" id="upi2">
-                    <img src="/images/upi.png" alt="UPI 3">
-                    <p>UPI 3</p>
-                </div>
-            </div>
-
-            <div class="upi-note">
-                <p><strong>Note:</strong> In case of payment failure, please select UPI 1 or UPI 2.</p>
-                <p><strong>नोट:</strong> पेमेंट फेल होने की स्थिति में कृपया UPI 1 या UPI 2 का चयन करें।</p>
-            </div>
+            <% } %>
         </div>
 
         <footer></footer>
@@ -478,17 +488,25 @@
         };
 
         // CLICK EVENTS
-        document.getElementById("upi1").addEventListener("click", () => {
-            callPaymentApi("/wallet/paynow/manual_upi_request"); // LG PAY
-        });
+        <% if (country === 'PK') { %>
+            // Pakistan: Only LG-Pay PKR button
+            document.getElementById("lg_pay_pkr_btn").addEventListener("click", () => {
+                callPaymentApi("/wallet/paynow/manual_upi_request/pkr"); // LG PAY PKR
+            });
+        <% } else { %>
+            // India: All UPI options
+            document.getElementById("upi1").addEventListener("click", () => {
+                callPaymentApi("/wallet/paynow/manual_upi_request"); // LG PAY
+            });
 
-        document.getElementById("upi2").addEventListener("click", () => {
-            callPaymentApi("/wallet/paynow/manual_upi_request/watch"); // BOND PAY
-        });
+            document.getElementById("upi2").addEventListener("click", () => {
+                callPaymentApi("/wallet/paynow/manual_upi_request/watch"); // BOND PAY
+            });
 
-        document.getElementById("upi3").addEventListener("click", () => {
-            callPaymentApi("/wallet/paynow/watch_now"); 
-        });
+            document.getElementById("upi3").addEventListener("click", () => {
+                callPaymentApi("/wallet/paynow/watch_now"); 
+            });
+        <% } %>
     </script>
 
 </body>

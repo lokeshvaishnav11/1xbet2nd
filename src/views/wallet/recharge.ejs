@@ -726,9 +726,24 @@
          <section class="recharge-form-section">
             <p class="minimum-recharge">MINIMUM RECHARGE: <span id="min-recharge-amount">500</span></p>
 
+            <!-- Country Selection -->
+            <div class="country-selection" style="margin-bottom: 1.5rem;">
+               <label style="display: block; margin-bottom: 0.8rem; font-weight: 600; color: #87bc17;">SELECT YOUR COUNTRY:</label>
+               <div class="country-options" style="display: flex; gap: 1rem;">
+                  <button class="country-btn active" data-country="IN" style="flex: 1; padding: 1rem; border: 2px solid #87bc17; border-radius: 12px; background: linear-gradient(135deg, #2C2D30 0%, #1c1c1c 100%); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 600; transition: all 0.3s ease;">
+                     <span style="font-size: 1.5rem;">🇮🇳</span>
+                     <span>India (INR)</span>
+                  </button>
+                  <button class="country-btn" data-country="PK" style="flex: 1; padding: 1rem; border: 2px solid rgba(135, 188, 23, 0.4); border-radius: 12px; background: linear-gradient(135deg, #2C2D30 0%, #1c1c1c 100%); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-weight: 600; transition: all 0.3s ease;">
+                     <span style="font-size: 1.5rem;">🇵🇰</span>
+                     <span>Pakistan (PKR)</span>
+                  </button>
+               </div>
+            </div>
+
             <div class="amount-input-group">
                <input type="number" id="amount-input" placeholder="500+" value="1000" class="amount-input" inputmode="numeric"/>
-               <span class="currency-symbol">INR</span>
+               <span class="currency-symbol" id="currency-symbol">INR</span>
                <button id="deposit-button" class="deposit-action-btn">DEPOSIT</button>
             </div>
 
@@ -833,6 +848,7 @@
          // Example: minimumMoneyAllowed = parseInt('<%= MinimumMoney || 500 %>');
 
          let currentAmount = 1000; // Default amount
+         let selectedCountry = 'IN'; // Default country: India
 
          // --- Functions ---
 
@@ -920,7 +936,7 @@
          const handleManualUPIPaymentRequest = async (moneyAmount) => {
             // Redirect to the page that handles manual UPI details/QR code etc.
             // Ensure this URL is correct for your application.
-            window.location.href = `/wallet/paynow/manual_upi?am=${moneyAmount}`;
+            window.location.href = `/wallet/paynow/manual_upi?am=${moneyAmount}&country=${selectedCountry}`;
             // Note: Execution stops here due to redirect. Error handling for the redirect itself is limited.
          };
 
@@ -959,7 +975,36 @@
 
 
          // --- Event Listeners ---
-
+         
+         // Country selection buttons
+         const countryButtons = document.querySelectorAll('.country-btn');
+         countryButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+               event.preventDefault();
+               // Remove active class from all buttons
+               countryButtons.forEach(btn => {
+                  btn.classList.remove('active');
+                  btn.style.borderColor = 'rgba(135, 188, 23, 0.4)';
+                  btn.style.boxShadow = 'none';
+               });
+               // Add active class to clicked button
+               button.classList.add('active');
+               button.style.borderColor = '#87bc17';
+               button.style.boxShadow = '0 8px 20px rgb(135 187 24 / 50%)';
+                     
+               // Update selected country
+               selectedCountry = button.dataset.country;
+                     
+               // Update currency symbol
+               const currencySymbol = document.getElementById('currency-symbol');
+               if (selectedCountry === 'IN') {
+                  currencySymbol.textContent = 'INR';
+               } else if (selectedCountry === 'PK') {
+                  currencySymbol.textContent = 'PKR';
+               }
+            });
+         });
+         
          // Preset amount button clicks
          presetAmountButtons.forEach(button => {
             button.addEventListener('click', (event) => {
