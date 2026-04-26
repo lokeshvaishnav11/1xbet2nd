@@ -620,6 +620,9 @@ const add5D = async(game) => {
             
             const optimalWinningString = findOptimalWinningString(waiting);
             console.log("Optimal Winning String:", optimalWinningString);
+            if(! optimalWinningString){
+              optimalWinningString = "49821"
+            }
             await connection.execute(`UPDATE 5d SET result = ?,status = ? WHERE period = ? AND game = ${game}`, [optimalWinningString, 1, period]);
             
         }
