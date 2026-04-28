@@ -69,7 +69,7 @@ function showListOrder3(list_orders, x) {
   $(`.game-list .con-box:eq(${x}) .hb`).prepend(htmls);
   $(`.game-list .con-box:eq(${x}) .hb .c-tc`).last().remove();
 }
-var socket = io();
+var socket = io("http://localhost:3005");
 var pageno = 0;
 var limit = 10;
 var page = 1;

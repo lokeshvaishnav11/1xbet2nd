@@ -61,7 +61,7 @@ function initGame(startingCoins) {
   });
 
   // --- Socket Connection ---
-  const socket = io("http://localhost:3000");
+  const socket = io("http://localhost:3005");
 
   // --- State Variables ---
   let bets = { Dragon: 0, Tie: 0, Tiger: 0 }; // Staging object for current round bets

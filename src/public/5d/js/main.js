@@ -1,4 +1,4 @@
-let socket = io();
+let socket = io("http://localhost:3005");
 var pageno = 0;
 var limit = 10;
 var page = 1;

@@ -1,5 +1,5 @@
 
-var socket = io();
+var socket = io("http://localhost:3005");
 let typeid = $('html').attr('data-change');
 let game = '';
 if (typeid == '1') game = 'wingo';

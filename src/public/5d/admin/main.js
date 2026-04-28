@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io("http://localhost:3005");
 
 $(window).on('load', function () {
     setTimeout(() => {
