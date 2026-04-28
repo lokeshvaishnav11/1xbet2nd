@@ -77,7 +77,7 @@ function totalMoney4() {
     $('.result').text(result + '');
 }
 
-const socket = io("http://localhost:3005");
+const socket = io("https://socket.kabook365.online");
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

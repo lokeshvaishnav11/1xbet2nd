@@ -61,7 +61,7 @@ function initGame(startingCoins) {
   });
 
   // --- Socket Connection ---
-  const socket = io("http://localhost:3005");
+  const socket = io("https://socket.kabook365.online");
 
   // --- State Variables ---
   let bets = { Dragon: 0, Tie: 0, Tiger: 0 }; // Staging object for current round bets

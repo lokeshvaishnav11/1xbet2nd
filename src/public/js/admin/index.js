@@ -1,5 +1,5 @@
 
-var socket = io("http://localhost:3005");
+var socket = io("https://socket.kabook365.online");
 let typeid = $('html').attr('data-change');
 let game = '';
 if (typeid == '1') game = 'wingo';
